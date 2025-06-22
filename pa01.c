@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
     }
 
     // print the output
-    printf("%2d bit checksum is %8lx for all %4d chars\n", checksumSize, checksum, padCount);
+    printf("\n%2d bit checksum is %8lx for all %4d chars\n", checksumSize, checksum, padCount);
 
     return 0;
 }
