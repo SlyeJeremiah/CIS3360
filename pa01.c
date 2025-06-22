@@ -80,7 +80,8 @@ int main(int argc, char **argv) {
             putchar('\n');
         }
     }
-    if (count % 80 != 0) { // if theres less or more than multiples of 80 characters print a final newline
+    // only add a final newline if the last character wasnt already a newline
+    if (count % 80 != 0 && buffer[count-1] != '\n') { 
         putchar('\n');
     }
 
