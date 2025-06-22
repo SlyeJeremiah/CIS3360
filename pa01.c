@@ -73,6 +73,7 @@ int main(int argc, char **argv) {
     // format the echoed characters so its 80 characters per line (NOTE TO SELF: including '\n' which is ONE character)
     // since the character variable is an int it makes sense to use putchar because it takes an int
     // and writes the character to the standard output
+    printf("\n");
     for (int i = 0; i < count; i++) {
         putchar(buffer[i]);
         if ((i+1) % 80 == 0) { // after every 80 characters (when i = 79, 159, ...) print a newline
