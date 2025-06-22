@@ -70,6 +70,16 @@ int main(int argc, char **argv) {
     // clsoe the file
     fclose(fp);
 
+    // for actually calculating the checksum i might need to pad with X first
+    int padCount = count;
+    // padding isnt needed for 8bit since each ascii character is 8bits in hex
+    // so padding logic is only needed for 16 and 32
+    // for 16bit two bytes (2 letters) is needed (4 hex characters) so pading is needed is if he padcount isnt divisible by 2
+    // for 32bit its 4 bytes (4 letters) so padding is needed if the padcount isnt divisible by 4
+    while ((checksumSize == 16 && padCount %2 != 0 ) || (checksumSize ==  32 && padCount %4 != 0)) {
+        buffer[padCount++] = 'X';
+    }
+
     // format the echoed characters so its 80 characters per line (NOTE TO SELF: including '\n' which is ONE character)
     // since the character variable is an int it makes sense to use putchar because it takes an int
     // and writes the character to the standard output
@@ -83,16 +93,6 @@ int main(int argc, char **argv) {
     // only add a final newline if the last character wasnt already a newline
     if ((count % 80 != 0) && !(count > 0 && buffer[count - 1] == '\n')) { 
         putchar('\n');
-    }
-
-    // for actually calculating the checksum i might need to pad with X first
-    int padCount = count;
-    // padding isnt needed for 8bit since each ascii character is 8bits in hex
-    // so padding logic is only needed for 16 and 32
-    // for 16bit two bytes (2 letters) is needed (4 hex characters) so pading is needed is if he padcount isnt divisible by 2
-    // for 32bit its 4 bytes (4 letters) so padding is needed if the padcount isnt divisible by 4
-    while ((checksumSize == 16 && padCount %2 != 0 ) || (checksumSize ==  32 && padCount %4 != 0)) {
-        buffer[padCount++] = 'X';
     }
 
     // checksum calculation
