@@ -48,12 +48,88 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    
+    // open the file
+    FILE *fp = fopen(filename, "r");
+    // make sure there was no error when te file was opened
+    if (fp == NULL) {
+        perror("There was an error in opening the file");
+        return 1;
+    }
+
+    // i can use a buffer to store the characters in the file
+    char buffer[10000]; // REMINDER TO SELF: upper limit might need to be changed but i need to test
+
+    // integer variables to get the characters in the buffer (fgetc returns an unsigned char cast to an int)
+    int count = 0;
+    int character;
+
+    // put the text characters into the buffer
+    while ((character = fgetc(fp)) != EOF) {
+        buffer[count++] = character;
+    }
+
+    // clsoe the file
+    fclose(fp);
+
+    // format the echoed characters so its 80 characters per line (NOTE TO SELF: including '\n' which is ONE character)
+    // since the character variable is an int it makes sense to use putchar because it takes an int
+    // and writes the character to the standard output
+    for (int i = 0; i < count; i++) {
+        putchar(buffer[i]);
+        if ((i+1) % 80 == 0) { // after every 80 characters (when i = 79, 159, ...) print a newline
+            putchar('\n');
+        }
+    }
+    if (count % 80 != 0) { // if theres less or more than multiples of 80 characters print a final newline
+        putchar('\n');
+    }
+
+    // for actually calculating the checksum i might need to pad with X first
+    int padCount = count;
+    // padding isnt needed for 8bit since each ascii character is 8bits in hex
+    // so padding logic is only needed for 16 and 32
+    // for 16bit two bytes (2 letters) is needed (4 hex characters) so pading is needed is if he padcount isnt divisible by 2
+    // for 32bit its 4 bytes (4 letters) so padding is needed if the padcount isnt divisible by 4
+    while ((checksumSize == 16 && padCount %2 != 0 ) || (checksumSize ==  32 && padCount %4 != 0)) {
+        buffer[padCount++] = 'X';
+    }
+
+    // checksum calculation
+    unsigned long checksum = 0;
+    // 8 bit
+    if (checksumSize == 8) {
+        for (int i = 0; i < padCount; i++) {
+            checksum = checksum + (unsigned char) buffer[i]; // add all the characters
+        }
+        // mask so i can remove the overflow
+        checksum = checksum & 0xFF;
+    }
+    // 16 bit
+    if (checksumSize == 16) {
+        for (int i = 0; i < padCount; i = i + 2) {
+            // for each two letters, move the left letter over 8 spaces (4 for each hex character) and OR it with the next letter to make one word
+            unsigned short word = ((unsigned char) buffer[i] << 8) | (unsigned char) buffer[i+1];
+            checksum = checksum + word; // add all the words
+        }
+        // mask so i can remove the overflow
+        checksum = checksum & 0xFFFF;
+    }
+    // 32 bit
+    if (checksumSize == 32) {
+        for (int i = 0; i < padCount; i = i + 4) {
+            // for each 4 letters, move each letter the necessary amount of spaces and OR it with the next letters to make one word
+            unsigned int word = ((unsigned char) buffer[i] << 24) | ((unsigned char) buffer[i+1] << 16) | ((unsigned char) buffer[i+2] << 8) | (unsigned char) buffer[i+3];
+            checksum = checksum + word; // add all the words
+        }
+        // mask so i can remove the overflow
+        checksum = checksum & 0xFFFFFFFF;
+    }
+
+    // print the output
+    printf("%2d bit checksum is %8lx for all %4d chars\n", checksumSize, checksum, padCount);
+
+    return 0;
 }
-
-
-
-
 
 
 
