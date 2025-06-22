@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
         }
     }
     // only add a final newline if the last character wasnt already a newline
-    if (count % 80 != 0 && buffer[count-1] != '\n') { 
+    if ((count % 80 != 0) && !(count > 0 && buffer[count - 1] == '\n')) { 
         putchar('\n');
     }
 
