@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
         }
     }
     // only add a final newline if the last character wasnt already a newline
-    if ((padCount % 80 != 0) && !(padCount > 0 && buffer[padCount - 1] == '\n')) { 
+    if (padCount % 80 != 0 && (padCount == 0 || buffer[padCount - 1] != '\n')) { 
         putchar('\n');
     }
 
