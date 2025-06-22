@@ -34,7 +34,6 @@ int main(int argc, char **argv) {
 
     // make sure that three arguments are passed (file name, input file, checksum size)
     if (argc != 3) {
-        fprintf(stderr, "Be sure to follow this format when running: ./pa01 inputFilename.txt checksumSize");
         return 1;
     }
 
@@ -52,7 +51,7 @@ int main(int argc, char **argv) {
     FILE *fp = fopen(filename, "r");
     // make sure there was no error when te file was opened
     if (fp == NULL) {
-        perror("There was an error in opening the file");
+        perror("Error opening file");
         return 1;
     }
 
