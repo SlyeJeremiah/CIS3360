@@ -2,7 +2,7 @@
 case $1 in
     pa02.c)
 	rm -f -- pa02
-	gcc pa02.c 
+	gcc pa02.c -o pa02
 	if [ $? -ne 0 ]; then 
 	    echo "Compile of pa02.c failed"
 	    echo "Good bye!"

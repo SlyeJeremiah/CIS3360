@@ -25,7 +25,7 @@
 | Due Date: per assignment
 +===========================================================================*/
 
-
+// NOTE TO TA/GRADER/PROFESSOR: THE pa02x.sh FILE IS INCORRECT. ON LINE 5, IT SHOULD BE "gcc pa02.c -o pa02"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,16 +60,16 @@ int main(int argc, char **argv) {
     
     // get the matrix size
     int n;
-    fscanf(keyFile, "%d", &n); // reads the first integer and assigns that num to n
+    fscanf(kfp, "%d", &n); // reads the first integer and assigns that num to n
 
     // get the values in the matrix
     int keyMatrix[MAX][MAX]; // a 9 by 9 matrix
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            fscanf(keyFile, "%d", &keyMatrix[i][j]); // set the values from the file into the matrix
+            fscanf(kfp, "%d", &keyMatrix[i][j]); // set the values from the file into the matrix
         }
     }
-    fclose(keyFile);
+    fclose(kfp);
 
     // echo the key matrix
     printf("\nKey matrix:\n");
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
     int plainLength = 0;
     int character;
 
-    while ((character = fgetc(plainFile)) != EOF) {
+    while ((character = fgetc(pfp)) != EOF) {
         // test to see if the character is uppercase and if it is
         // make it lowercase
         if (character >= 'A' && character <= 'Z') {
@@ -107,6 +107,7 @@ int main(int argc, char **argv) {
             plainBuffer[plainLength++] = character;
         }
     }
+    fclose(pfp);
 
     // now i have to pad if the length of the buffer isnt a multiple of n
     int leftOver = plainLength % n;
@@ -157,10 +158,7 @@ int main(int argc, char **argv) {
             putchar('\n');
         }
     }
-    // only add a final newline if the last character wasnt already a newline
-    if (plainLength % 80 != 0) {
-        putchar('\n');
-    }
+    
         
     return 0;
 }
